@@ -1,37 +1,50 @@
 import httpStatus from "http-status";
-import { User } from "../models/user.model";
+import { User } from "../models/user.js";
 import bcrypt, { hash } from "bcrypt";
+import crypto  from "crypto";
 
-const login =async(req ,res)=>{
-    const { username ,password } = req.body;
-
-        return res.status(400).json({message :"Please Provide"})
-    }
+export const login = async (req, res) => {
     try {
-        const user =await  User.find ({ username });
-        if(!user){
-            return res.status(httpStatus.NOT_FOUND).json({message:"User Not Found"})
-        }
-        
-        if (bcrypt.compare(password,user.password)){
-            let token = crypto.randomBytes(20).toString("hex");
-            user.token=token;
-            await user.save();
-            return res.status(httpStatus.OK).json({token: token})
-        }
-    } catch (e){
-        return res.status(500).json({message :"something went wrong"})
-    }
+        const { username, password } = req.body;
 
+        const user = await User.findOne({ username });
+
+        if (!user) {
+            return res.status(httpStatus.NOT_FOUND).json({
+                message: "User Not Found"
+            });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            return res.status(httpStatus.UNAUTHORIZED).json({
+                message: "Invalid Password"
+            });
+        }
+
+        const token = crypto.randomBytes(20).toString("hex");
+        user.token = token;
+
+        await user.save();
+
+        return res.status(httpStatus.OK).json({ token });
+
+    } catch (error) {
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+            message: error.message
+        });
+    }
+};
 
 
 
 // register
-const register = async (req, res) => {
+export const register = async (req, res) => {
   const { name, username, password } = req.body;
 
   try {
-    const existingUser = await User.findone({ username });
+    const existingUser = await User.findOne({ username });
     if (existingUser) {
       return res
         .status(httpStatus.FOUND)
@@ -42,7 +55,7 @@ const register = async (req, res) => {
     const newUser = new User({
       name: name,
       username: username,
-      password: password,
+      password: hashedPassword,
     });
 
     await newUser.save();
@@ -54,3 +67,4 @@ const register = async (req, res) => {
     res.json({ message: `somthing went wrong ${e}` });
   }
 };
+
