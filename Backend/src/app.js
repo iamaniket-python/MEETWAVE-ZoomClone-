@@ -36,8 +36,4 @@ const start = async () => {
 };
 
 
-
-
-
-
 start();
