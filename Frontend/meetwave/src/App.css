@@ -1,0 +1,143 @@
+.HomepageContainer{
+    height: 100vh;
+    background:  url("/public/background.jpg");
+    background-repeat: no-repeat;
+    background-size:cover;
+    color: orange;
+    
+}
+.navbar{
+  width: fit-content;
+  margin: 0.1px auto;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding: 12px 20px;
+  background: #111;
+  border-radius: 50px;
+  box-shadow: 0px 20px 40px rgba(0,0,0,0.3);
+  
+}
+
+.logo{
+  background: white;
+  color: black;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+}
+
+.nav-links{
+  display: flex;
+  gap: 35px;
+}
+
+.nav-links a{
+  color: #ddd;
+  text-decoration: none;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.nav-links a:hover{
+  color: white;
+}
+
+.email-btn{
+  padding: 10px 18px;
+  border-radius: 25px;
+  border: none;
+
+  background: white;
+  color: black;
+
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.login-btn{
+  padding: 10px 18px;
+  border-radius: 25px;
+  border: none;
+
+  background: white;
+  color: black;
+
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.email-btn:hover{
+  background: #f2f2f2;
+}
+.login-btn:hover{
+  background: #f2f2f2;
+}
+.hero{
+  height:90vh;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 80px;
+  color:white;
+}
+
+.hero-left{
+  max-width:600px;
+}
+
+.hero-left h1{
+  font-size:60px;
+  font-weight:700;
+}
+
+.orange{
+  color:#ff7a18;
+}
+
+.hero-left p{
+  margin-top:20px;
+  font-size:20px;
+  color: black;
+}
+
+.highlight{
+  background: linear-gradient(135deg, #FFD400, #FF9F1C);
+  color: black;
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(255, 212, 0, 0.4);
+}
+
+.highlight:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(255, 212, 0, 0.6);
+}
+
+.highlight:active{
+  transform: translateY(0px);
+  box-shadow: 0 5px 12px rgba(255, 212, 0, 0.3);
+}
+
+.hero-right img{
+  width:250px;
+  border-radius:20px;
+  transform: rotate(20deg);
+}
+.hero-left img{
+    width:300px;
+  border-radius:20px;
+  transform: rotate(20deg);
+}
