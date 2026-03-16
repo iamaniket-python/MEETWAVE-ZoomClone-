@@ -39,7 +39,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
   background: "radial-gradient(circle at center, #e3f2fd, #ffffff)",
 }));
 
-export default function Authentication() {
+export default function Signin() {
   const [username, setUsername] = React.useState();
   const [formState, setFormState] = React.useState(0);
   const [password, setPassword] = React.useState();
