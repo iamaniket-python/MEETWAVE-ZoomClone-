@@ -1,10 +1,10 @@
 import React, { useState } from "react";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import CssBaseline from "@mui/material/CssBaseline";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Divider from "@mui/material/Divider";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import Link from "@mui/material/Link";
@@ -12,7 +12,9 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
+
 import { styled } from "@mui/material/styles";
+import { AuthContext } from "../contexts/Authcontext";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -31,22 +33,54 @@ const Card = styled(MuiCard)(({ theme }) => ({
   boxShadow: "0 10px 40px rgba(0,0,0,0.1)",
 }));
 
-const SignInContainer = styled(Stack)(({ theme }) => ({
+const SignInContainer = styled(Stack)(() => ({
   height: "100vh",
   justifyContent: "center",
   alignItems: "center",
-
   background: "radial-gradient(circle at center, #e3f2fd, #ffffff)",
 }));
 
 export default function Signin() {
-  const [username, setUsername] = React.useState();
-  const [formState, setFormState] = React.useState(0);
-  const [password, setPassword] = React.useState();
-  const [error, setError] = React.useState();
-  const [message, setMessage] = React.useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const[open ,setOpen] =React.useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const { handelLogin, handelRegister } = React.useContext(AuthContext);
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+
+  //   let valid = true;
+
+  //   // Email validation
+  //   if (!email.includes("@")) {
+  //     setEmailError(true);
+  //     setEmailErrorMessage("Please enter a valid email");
+  //     valid = false;
+  //   } else {
+  //     setEmailError(false);
+  //     setEmailErrorMessage("");
+  //   }
+
+  //   // Password validation
+  //   if (password.length < 6) {
+  //     setPasswordError(true);
+  //     setPasswordErrorMessage("Password must be at least 6 characters");
+  //     valid = false;
+  //   } else {
+  //     setPasswordError(false);
+  //     setPasswordErrorMessage("");
+  //   }
+
+  //   if (valid) {
+  //     console.log("Login Data:", email, password);
+  //   }
+  // };
+
+
 
   return (
     <>
@@ -71,7 +105,7 @@ export default function Signin() {
 
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={handelLogin}
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -84,8 +118,8 @@ export default function Signin() {
               <TextField
                 error={emailError}
                 helperText={emailErrorMessage}
-                id="email"
-                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
                 fullWidth
               />
@@ -97,8 +131,8 @@ export default function Signin() {
               <TextField
                 error={passwordError}
                 helperText={passwordErrorMessage}
-                id="password"
-                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 type="password"
                 placeholder="••••••"
                 fullWidth
@@ -127,36 +161,6 @@ export default function Signin() {
             </Button>
           </Box>
 
-          {/* /*<Divider sx={{ my: 2 }}>OR</Divider>
-{ 
-          <Button
-            fullWidth
-            variant="outlined"
-            sx={{
-              borderRadius: "10px",
-              py: 1.2,
-              "&:hover": {
-                backgroundColor: "#f5f5f5"
-              }
-            }}
-          >
-            Sign in with Google
-          </Button>
-
-          <Button
-            fullWidth
-            variant="outlined"
-            sx={{
-              borderRadius: "10px",
-              py: 1.2,
-              "&:hover": {
-                backgroundColor: "#f5f5f5"
-              }
-            }}
-          >
-            Sign in with Facebook
-          </Button> */}
-
           <Typography sx={{ textAlign: "center", mt: 2 }}>
             Don't have an account? <Link href="#">Sign up</Link>
           </Typography>
@@ -164,4 +168,5 @@ export default function Signin() {
       </SignInContainer>
     </>
   );
+
 }

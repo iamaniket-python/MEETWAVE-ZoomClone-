@@ -2,21 +2,23 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import LandingPage from "./pages/landing";
-import Signin from "./pages/Signin";
-// import Register from "./pages/Register";
+
+import Authentication from "./pages/authentication";
+import Register from "./pages/register";
+import { AuthProvider } from "./contexts/Authcontext";
 
 function App() {
   return (
     <Router>
-      <Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
 
-        <Route path="/" element={<LandingPage />} />
+          <Route path="/signin" element={<Authentication />} />
 
-        <Route path="/signin" element={<Signin />} />
-
-        {/* <Route path="/register" element={<Register />} /> */}
-
-      </Routes>
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </AuthProvider>
     </Router>
   );
 }
