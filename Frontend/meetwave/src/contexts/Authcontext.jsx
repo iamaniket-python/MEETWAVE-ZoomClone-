@@ -1,6 +1,7 @@
 import React, { createContext, useState } from "react";
 import axios from "axios";
 
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -9,26 +10,23 @@ export const AuthProvider = ({ children }) => {
 
   const handelRegister = async (name, email, password) => {
     try {
-
-      const result = await axios.post("http://localhost:8000/register", {
+      const result = await axios.post("http://localhost:8000/api/v1/users/register", {
         name,
         email,
         password
       });
 
-      if (result.status === 200) {
-        console.log("User Registered");
-      }
+      console.log("Register response:", result.data);
 
     } catch (err) {
-      console.log(err);
+      console.log("Register error:", err);
     }
   };
 
   const handelLogin = async (email, password) => {
     try {
 
-      const result = await axios.post("http://localhost:8000/login", {
+      const result = await axios.post("http://localhost:8000/api/v1/users/login", {
         email,
         password
       });

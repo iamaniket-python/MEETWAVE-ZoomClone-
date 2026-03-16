@@ -121,6 +121,7 @@ export default function Register() {
 
             <Button
               type="submit"
+            
               fullWidth
               variant="contained"
               sx={{

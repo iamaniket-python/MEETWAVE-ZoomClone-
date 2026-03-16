@@ -143,6 +143,7 @@ export default function Signin() {
 
             <Button
               type="submit"
+              onClick={handelLogin}
               fullWidth
               variant="contained"
               sx={{
@@ -157,7 +158,7 @@ export default function Signin() {
                 },
               }}
             >
-              Sign In
+              Login
             </Button>
           </Box>
 
