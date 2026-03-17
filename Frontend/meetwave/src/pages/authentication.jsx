@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -41,46 +41,26 @@ const SignInContainer = styled(Stack)(() => ({
 }));
 
 export default function Signin() {
+  const { handelLogin } = useContext(AuthContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [emailError, setEmailError] = useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [error, setError] = useState("");
 
-  const [passwordError, setPasswordError] = useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
-  const { handelLogin, handelRegister } = React.useContext(AuthContext);
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
+  // ✅ Correct submit handler
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  //   let valid = true;
+    const res = await handelLogin(email, password);
 
-  //   // Email validation
-  //   if (!email.includes("@")) {
-  //     setEmailError(true);
-  //     setEmailErrorMessage("Please enter a valid email");
-  //     valid = false;
-  //   } else {
-  //     setEmailError(false);
-  //     setEmailErrorMessage("");
-  //   }
-
-  //   // Password validation
-  //   if (password.length < 6) {
-  //     setPasswordError(true);
-  //     setPasswordErrorMessage("Password must be at least 6 characters");
-  //     valid = false;
-  //   } else {
-  //     setPasswordError(false);
-  //     setPasswordErrorMessage("");
-  //   }
-
-  //   if (valid) {
-  //     console.log("Login Data:", email, password);
-  //   }
-  // };
-
-
+    if (res?.success) {
+      setError("");
+      // redirect or success action
+    } else {
+      setError(res?.message || "Login failed");
+    }
+  };
 
   return (
     <>
@@ -105,7 +85,7 @@ export default function Signin() {
 
           <Box
             component="form"
-            onSubmit={handelLogin}
+            onSubmit={handleSubmit}
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -116,8 +96,6 @@ export default function Signin() {
               <FormLabel>Email</FormLabel>
 
               <TextField
-                error={emailError}
-                helperText={emailErrorMessage}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
@@ -129,8 +107,6 @@ export default function Signin() {
               <FormLabel>Password</FormLabel>
 
               <TextField
-                error={passwordError}
-                helperText={passwordErrorMessage}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 type="password"
@@ -141,9 +117,14 @@ export default function Signin() {
 
             <FormControlLabel control={<Checkbox />} label="Remember me" />
 
+            {error && (
+              <Typography color="error" sx={{ textAlign: "center" }}>
+                {error}
+              </Typography>
+            )}
+
             <Button
               type="submit"
-              onClick={handelLogin}
               fullWidth
               variant="contained"
               sx={{
@@ -163,11 +144,10 @@ export default function Signin() {
           </Box>
 
           <Typography sx={{ textAlign: "center", mt: 2 }}>
-            Don't have an account? <Link href="#">Sign up</Link>
+            Don't have an account? <Link href="/signup">Sign up</Link>
           </Typography>
         </Card>
       </SignInContainer>
     </>
   );
-
 }

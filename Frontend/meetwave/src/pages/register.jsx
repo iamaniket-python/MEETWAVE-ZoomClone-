@@ -39,21 +39,31 @@ const RegisterContainer = styled(Stack)(() => ({
 }));
 
 export default function Register() {
-
   const { handelRegister } = useContext(AuthContext);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await handelRegister(name, email, password);
+    const res = await handelRegister(name, email, password);
 
-    setName("");
-    setEmail("");
-    setPassword("");
+    if (res?.success) {
+      setError("");
+      setSuccess(res.message || "Registered successfully");
+
+      setName("");
+      setEmail("");
+      setPassword("");
+    } else {
+      setSuccess("");
+      setError(res?.message || "User Already Exist");
+    }
   };
 
   return (
@@ -62,7 +72,6 @@ export default function Register() {
 
       <RegisterContainer>
         <Card>
-
           <Typography
             component="h1"
             variant="h4"
@@ -87,7 +96,6 @@ export default function Register() {
               gap: 2,
             }}
           >
-
             <FormControl>
               <FormLabel>Full Name</FormLabel>
               <TextField
@@ -119,9 +127,31 @@ export default function Register() {
               />
             </FormControl>
 
+            {/* ❌ Error Message */}
+            {error && (
+              <Typography
+                color="error"
+                sx={{ textAlign: "center", fontSize: "14px" }}
+              >
+                {error}
+              </Typography>
+            )}
+
+            {/* ✅ Success Message */}
+            {success && (
+              <Typography
+                sx={{
+                  textAlign: "center",
+                  fontSize: "14px",
+                  color: "green",
+                }}
+              >
+                {success}
+              </Typography>
+            )}
+
             <Button
               type="submit"
-            
               fullWidth
               variant="contained"
               sx={{
@@ -138,7 +168,6 @@ export default function Register() {
             >
               Register
             </Button>
-
           </Box>
 
           <Typography sx={{ textAlign: "center", mt: 2 }}>
@@ -147,7 +176,6 @@ export default function Register() {
               Sign in
             </Link>
           </Typography>
-
         </Card>
       </RegisterContainer>
     </>

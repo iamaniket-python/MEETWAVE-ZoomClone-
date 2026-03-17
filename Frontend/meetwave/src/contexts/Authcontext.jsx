@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const result = await axios.post("http://localhost:8000/api/v1/users/register", {
         name,
+        username:name,
         email,
         password
       });
@@ -27,12 +28,17 @@ export const AuthProvider = ({ children }) => {
     try {
 
       const result = await axios.post("http://localhost:8000/api/v1/users/login", {
-        email,
+        username:email,
         password
       });
 
       if (result.status === 200) {
         setUser(result.data.user);
+
+        return {
+          success:true,
+          message :"Login Succssfully"
+        };
       }
 
     } catch (err) {
