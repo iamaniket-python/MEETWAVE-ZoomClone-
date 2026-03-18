@@ -1,4 +1,6 @@
-import React, { use, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import "../styles/videocom.css";
+import { TextField, Button, Card } from "@mui/material";
 
 const server_url = "http:/localhost:8000";
 
@@ -9,7 +11,7 @@ export default function VideoMeet() {
   var SocketRef = useRef();
   let socketIdRef = useRef();
 
-  let localVideoRef = userRef();
+  let localVideoRef = useRef();
   let [videoAvailable, setVideoAvailable] = useState(true);
 
   let [audioAvailable, setAudioAvailable] = useState(true);
@@ -20,7 +22,7 @@ export default function VideoMeet() {
   let [screen, setScreen] = useState();
 
   let [showModal, setModal] = useState();
-
+  const [audioPermission, setAudioPermission] = useState(false);
   let [screenAvailable, setScreenAvailable] = useState();
 
   let [message, setMessage] = useState([]);
@@ -35,9 +37,162 @@ export default function VideoMeet() {
 
   let [videos, setVideos] = useState([]);
 
-  return(
-<div>
-    
-</div>
-  ) 
+  const getPermissions = async () => {
+    try {
+      const videoPermission = await navigator.mediaDevices.getUserMedia({
+        video: true,
+      });
+
+      if (videoPermission) {
+        setVideoAvailable(true);
+      } else {
+        setVideoAvailable(false);
+      }
+    } catch {}
+  };
+  const videoPermissions = async () => {
+    try {
+      const videoPermission = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      });
+
+      if (audioPermission) {
+        setAudioAvailable(true);
+      } else {
+        setAudioAvailable(false);
+      }
+
+      if (navigator.mediaDevices.getDisplayMedia) {
+        setScreenAvailable(true);
+      } else {
+        setScreenAvailable(false);
+      }
+
+      if (videoAvailable || audioAvailable) {
+        const usermediaStream = await navigator.mediaDevices.getUserMedia({
+          video: videoAvailable,
+          audioAvailable,
+        });
+
+        if (usermediaStream) {
+          window.localStream = usermediaStream;
+          if (localVideoRef.current) {
+            localVideoRef.current.srcObject = usermediaStream;
+          }
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getPermissions();
+    videoPermissions();
+  }, []);
+
+  let getUserMediaSuccess = (stream) => {
+
+  };
+
+  let getUserMedia = () => {
+    if ((video && videoAvailable) || (audio && audioAvailable)) {
+      navigator.mediaDevices
+        .getUserMedia({ video: video, audio: audio })
+        .then(getUserMediaSuccess)
+        .then((stream) => {})
+        .catch((e) => console.log(e));
+    } else {
+      try {
+        let tracks = localVideoRef.current.srcObject.getTracks();
+        tracks.forEach((track) => track.stop());
+      } catch (e) {}
+    }
+  };
+
+  useEffect(() => {
+    if (video === undefined && audio === undefined) {
+      getMedia();
+    }
+  }, [audio, video]);
+
+  let getMedia = () => {
+    setAudio(audioAvailable);
+    setVideo(audioAvailable);
+
+    // connectToSocketServer();
+  };
+  let connect = () => {
+    seAskforUsername(false);
+    getMedia();
+  };
+  return (
+    <div>
+      {askForUsername === true ? (
+        <div
+          style={{
+            height: "100vh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            background: "#0f172a",
+          }}
+        >
+          {askForUsername && (
+            <Card
+              style={{
+                padding: "30px",
+                width: "350px",
+                textAlign: "center",
+                borderRadius: "20px",
+                background: "#1e293b",
+                color: "white",
+              }}
+            >
+              <h2 style={{ marginBottom: "20px" }}>Join Video Meet</h2>
+
+              <TextField
+                fullWidth
+                label="Enter Username"
+                variant="outlined"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                InputProps={{
+                  style: { color: "white" },
+                }}
+                InputLabelProps={{
+                  style: { color: "#94a3b8" },
+                }}
+                style={{ marginBottom: "20px" }}
+              />
+
+              <Button
+                variant="contained"
+                onClick={connect}
+                fullWidth
+                style={{
+                  background: "#6366f1",
+                  padding: "10px",
+                  borderRadius: "10px",
+                }}
+              >
+                Join Meeting
+              </Button>
+              <div>
+                <video
+                  ref={localVideoRef}
+                  autoPlay
+                  muted
+                  playsInline
+                  style={{ width: "300px", background: "black" }}
+                />
+              </div>
+            </Card>
+          )}
+        </div>
+      ) : (
+        <></>
+      )}
+    </div>
+  );
 }
