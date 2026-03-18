@@ -4,7 +4,6 @@ import { register } from "../controllers/UserAuthentication.js";
 
 const router =Router();
 
-router.route("/home").post(home)
 router.route("/login").post(login)
 router.route('/register').post(register)
 // router.route("/add_to_activity")

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState} from "react";
 import "../styles/videocom.css";
 import { TextField, Button, Card } from "@mui/material";
 
@@ -91,9 +91,7 @@ export default function VideoMeet() {
     videoPermissions();
   }, []);
 
-  let getUserMediaSuccess = (stream) => {
-
-  };
+  let getUserMediaSuccess = (stream) => {};
 
   let getUserMedia = () => {
     if ((video && videoAvailable) || (audio && audioAvailable)) {
@@ -116,11 +114,31 @@ export default function VideoMeet() {
     }
   }, [audio, video]);
 
+let gotMessageFromServer =(formId, message)=>{
+
+}
+
+let addMessage=()=>{
+
+}
+  let intializeSocket = () => {
+    SocketRef.current = io.connect(server_url, { secure: false });
+    SocketRef.current.on('singal',gotMessageFromServer)
+    socketIdRef.Ref.current.on("connect",()=>{
+      SocketRef.current.emit("join-call",window.location.href)
+      socketIdRef.current=SocketRef.current.id
+      SocketRef.current.on("chat-message",addMessage)
+      socketIdRefRef.current.on("user-left",(id))={
+
+        setVideo((videos)=> video.filter)
+      }
+    })
+  };
+
   let getMedia = () => {
     setAudio(audioAvailable);
     setVideo(audioAvailable);
-
-    // connectToSocketServer();
+    intializeSocket();
   };
   let connect = () => {
     seAskforUsername(false);
