@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { io } from "socket.io-client";
 import "../styles/videocom.css";
 import { TextField, Button, Card } from "@mui/material";
 
@@ -16,7 +17,7 @@ export default function VideoMeet() {
 
   let [audioAvailable, setAudioAvailable] = useState(true);
 
-  let [video, setVideo] = useState();
+  let [video, setVideo] = useState([]);
 
   let [audio, setAudio] = useState();
   let [screen, setScreen] = useState();
@@ -89,6 +90,7 @@ export default function VideoMeet() {
   useEffect(() => {
     getPermissions();
     videoPermissions();
+    initializeSocket();
   }, []);
 
   let getUserMediaSuccess = (stream) => {};
@@ -114,31 +116,81 @@ export default function VideoMeet() {
     }
   }, [audio, video]);
 
-let gotMessageFromServer =(formId, message)=>{
+  let gotMessageFromServer = (formId, message) => {};
 
-}
+  let addMessage = () => {};
+  const initializeSocket = () => {
+    SocketRef.current = io(server_url);
 
-let addMessage=()=>{
+    //signal event
+    SocketRef.current.on("signal", gotMessageFromServer);
 
-}
-  let intializeSocket = () => {
-    SocketRef.current = io.connect(server_url, { secure: false });
-    SocketRef.current.on('singal',gotMessageFromServer)
-    socketIdRef.Ref.current.on("connect",()=>{
-      SocketRef.current.emit("join-call",window.location.href)
-      socketIdRef.current=SocketRef.current.id
-      SocketRef.current.on("chat-message",addMessage)
-      socketIdRefRef.current.on("user-left",(id))={
+    SocketRef.current.on("connect", () => {
+      SocketRef.current.emit("join-call", window.location.href);
 
-        setVideo((videos)=> video.filter)
-      }
-    })
+      socketIdRef.current = SocketRef.current.id;
+
+      // chat
+      SocketRef.current.on("chat-message", addMessage);
+
+      // user left
+      SocketRef.current.on("user-left", (id) => {
+        setVideos((videos) => videos.filter((video) => video.socketId !== id));
+      });
+
+      // user joined
+      SocketRef.current.on("user-joined", (id, clients) => {
+        clients.forEach((socketListId) => {
+          connections[socketListId] = new RTCPeerConnection(
+            peerConfiqConnections,
+          );
+          connections[socketListId].onicecandate = (event) => {
+            if (event.candiate == null) {
+              SocketRef.current.emit(
+                "siganl",
+                socketListId,
+                JSON.stringify({ ice: event.candiate }),
+              );
+            }
+          };
+          connections[socketListId].onaddstream = (event) => {
+            let videoExists = videoRef.current.find(
+              (video) => video.socketId === socketId,
+            );
+
+            if (videoExists) {
+              setVideo((videos) => {
+                const updatedVideos = videos.map((video) =>
+                  video.socketId === socketListId
+                    ? { ...video, stream: event.stream }
+                    : video,
+                );
+                videoRef.current = updatedVideos;
+                return updatedVideos;
+              });
+            } else {
+              let newVideo = {
+                socketId: socketListId,
+                stream: event.stream,
+                autoPlay: true,
+                playsInline: true,
+              };
+              setVideos((videos) => {
+                const updatedVideos = [...videos, newVideo];
+                videoRef.current = updatedVideos;
+                return updatedVideos;
+              });
+            }
+          };
+        });
+      });
+    });
   };
 
   let getMedia = () => {
     setAudio(audioAvailable);
     setVideo(audioAvailable);
-    intializeSocket();
+    initializeSocket();
   };
   let connect = () => {
     seAskforUsername(false);
