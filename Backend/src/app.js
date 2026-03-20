@@ -25,15 +25,25 @@ app.get("/home", (req, res) => {
 });
 
 const start = async () => {
-  app.set("mongo_user");
-  const connectionDb = await mongoose.connect(
+  try {
+    await mongoose.connect(
       "mongodb+srv://aniketsrivastava57_db_user:Shriradha@cluster0.2qsle1e.mongodb.net/zoomProject"
     );
-  console.log(`MONGO CONNECTED HOST: ${connectionDb.connection.host}`)
-  server.listen(app.get("port"), () => {
-    console.log("Listing port 8000");
-  });
-};
 
+    console.log("MongoDB Connected");
+
+    server.listen(app.get("port"), () => {
+      console.log("Server running on 8000");
+    });
+
+  } catch (error) {
+    console.log("MongoDB ERROR:", error.message);
+
+    // still start server even if DB fails
+    server.listen(app.get("port"), () => {
+      console.log("Server running without DB on 8000");
+    });
+  }
+};
 
 start();

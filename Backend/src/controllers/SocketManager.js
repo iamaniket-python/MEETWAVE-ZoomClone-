@@ -18,29 +18,33 @@ const intializeSocket = (server) => {
 
   io.on("connection", (socket) => {
     console.log("Something Connected")
-    socket.on("accept-call", (path) => {
-      if (connections[path] === undefined) {
-        connections[path] = [];
-      }
-      connections[path].push(socket.id);
+    socket.on("join-call", (path) => {
+  if (connections[path] === undefined) {
+    connections[path] = [];
+  }
 
-      timeOnline[socket.id] = new Date();
+  connections[path].push(socket.id);
+  timeOnline[socket.id] = new Date();
 
-      for (let user = 0; user < connections[path].length; user++) {
-        io.to(connections[path][user]).emit("user-joined");
-      }
+  for (let user = 0; user < connections[path].length; user++) {
+    io.to(connections[path][user]).emit(
+      "user-joined",
+      socket.id,
+      connections[path]
+    );
+  }
 
-      if (messages[path] === undefined) {
-        for (let user = 0; user < connections[path].length; user++) {
-          io.to(socket.id).emit(
-            "chat-message",
-            message[path][user]["data"],
-            messages[path][user]["sender"],
-            messages[path][user]["socket-id-sender"],
-          );
-        }
-      }
-    });
+  if (messages[path] !== undefined) {
+    for (let user = 0; user < messages[path].length; user++) {
+      io.to(socket.id).emit(
+        "chat-message",
+        messages[path][user]["data"],
+        messages[path][user]["sender"],
+        messages[path][user]["socket-id-sender"]
+      );
+    }
+  }
+});
     socket.on("signal", (toId, message) => {
       io.to(toId).emit("signal", socket.id, message);
     });
@@ -62,7 +66,7 @@ const intializeSocket = (server) => {
         messages[matchingRoom].push({
           sender: sender,
           data: data,
-          "socket-id-sender": console.log("message", key, ":", sender, data),
+         "socket-id-sender": socket.id,
         });
 
         //from where the messaging is coming
@@ -85,9 +89,9 @@ const intializeSocket = (server) => {
             key = rooms;
 
             for (let a = 0; a < connections[key].length; ++a) {
-              io.to(connections[key][a].emit("user_left_the _room", socket.id));
+             io.to(connections[key][a]).emit("user-left", socket.id);
             }
-            var index = connections[key].indexof(socket.id);
+            var index = connections[key].indexOf(socket.id);
 
             connections[key].splice(index, 1);
 
