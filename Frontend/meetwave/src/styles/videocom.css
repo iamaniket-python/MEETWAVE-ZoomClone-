@@ -1,0 +1,97 @@
+.app-container {
+  height: 100vh;
+  background: #091413;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Lobby */
+.lobby {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.input {
+  width: 250px;
+}
+
+.join-btn {
+  width: 250px;
+  background: #2563eb !important;
+}
+
+.preview-video {
+  width: 300px;
+  border-radius: 16px;
+  margin-top: 10px;
+}
+
+/* Video Layout */
+.video-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* Local video (small floating) */
+.local-video {
+  position: absolute;
+  bottom: 100px;
+  right: 20px;
+  width: 180px;
+  border-radius: 12px;
+  z-index: 2;
+}
+
+/* Remote videos grid */
+.remote-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  height: 100%;
+  gap: 10px;
+  padding: 10px;
+}
+
+.remote-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+/* Controls */
+.controls {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.control-btn {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+}
+
+.end-call {
+  background: red !important;
+  color: white !important;
+}
+.control-btn {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+}
+
+.control-btn:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+}

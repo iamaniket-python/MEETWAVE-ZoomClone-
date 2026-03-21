@@ -39,7 +39,7 @@ const start = async () => {
   } catch (error) {
     console.log("MongoDB ERROR:", error.message);
 
-    // still start server even if DB fails
+
     server.listen(app.get("port"), () => {
       console.log("Server running without DB on 8000");
     });
