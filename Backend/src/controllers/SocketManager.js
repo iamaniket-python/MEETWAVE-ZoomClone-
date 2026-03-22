@@ -25,7 +25,9 @@ const intializeSocket = (server) => {
 
       timeOnline[socket.id] = new Date();
       connections[path].forEach((id) => {
-        io.to(id).emit("user-joined", socket.id, connections[path]);
+        if (id !== socket.id) {
+          io.to(id).emit("user-joined", socket.id, connections[path]);
+        }
       });
       if (messages[path]) {
         messages[path].forEach((msg) => {
