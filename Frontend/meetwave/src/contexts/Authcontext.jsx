@@ -1,5 +1,6 @@
 import React, { createContext, useState } from "react";
 import axios from "axios";
+import client from "../utils/api"; // ✅ FIXED
 
 export const AuthContext = createContext();
 
@@ -15,7 +16,7 @@ export const AuthProvider = ({ children }) => {
           username: name,
           email,
           password,
-        },
+        }
       );
 
       console.log("Register response:", result.data);
@@ -31,7 +32,7 @@ export const AuthProvider = ({ children }) => {
         {
           username: email,
           password,
-        },
+        }
       );
 
       if (result.status === 200) {
@@ -39,7 +40,7 @@ export const AuthProvider = ({ children }) => {
 
         return {
           success: true,
-          message: "Login Succssfully",
+          message: "Login Successfully",
         };
       }
     } catch (err) {
@@ -59,11 +60,12 @@ export const AuthProvider = ({ children }) => {
       throw err;
     }
   };
+
   const addToUserHistory = async (meetingCode) => {
     try {
       const request = await client.post("/add_to_activity", {
         token: localStorage.getItem("token"),
-        meetingCode: meetingCode,
+        meetingCode,
       });
 
       return request.data;
@@ -72,6 +74,7 @@ export const AuthProvider = ({ children }) => {
       return null;
     }
   };
+
   return (
     <AuthContext.Provider
       value={{

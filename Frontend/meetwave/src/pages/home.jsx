@@ -1,15 +1,20 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Auth from "../utils/Auth";
 import { useNavigate } from "react-router-dom";
 import "../styles/home.css";
+import { AuthContext } from "../contexts/Authcontext";
 
 function HomeComponent() {
   let navigate = useNavigate();
   const [meetingCode, setMeetingCode] = useState("");
-  let handleJoinVideoCall = () => {
-    if (meetingCode.trim() === "") return;
+  
+
+  const {addToUserHistory} =useContext(AuthContext);
+  let handleJoinVideoCall = async () => {
+    await addToUserHistory(meetingCode)
     navigate(`/${meetingCode}`);
   };
+
   return (
     <div className="home-container">
       {/* HEADER */}
