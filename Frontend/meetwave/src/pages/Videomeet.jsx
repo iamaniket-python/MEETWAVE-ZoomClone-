@@ -3,10 +3,16 @@ import { io } from "socket.io-client";
 import "../styles/videocom.css";
 
 import { TextField, Button, IconButton, Badge } from "@mui/material";
-// import VideocamIcon from "@mui/icons-material/Videocam";
-// import VideocamOffIcon from "@mui/icons-material/VideocamOff";
-// import MicIcon from "@mui/icons-material/Mic";
-// import MicOffIcon from "@mui/icons-material/MicOff";
+import {
+  FaVideo,
+  FaVideoSlash,
+  FaMicrophone,
+  FaMicrophoneSlash,
+  FaPhoneSlash,
+  FaDesktop,
+  FaComments,
+} from "react-icons/fa";
+
 import CallEndIcon from "@mui/icons-material/CallEnd";
 import ScreenShareIcon from "@mui/icons-material/ScreenShare";
 import StopScreenShareIcon from "@mui/icons-material/StopScreenShare";
@@ -508,134 +514,121 @@ export default function VideoMeetComponent() {
   };
 
   return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
-      {askForUsername ? (
-        <div>
-          <h2>Enter into Lobby</h2>
+    <div className="meet-container">
+  {askForUsername ? (
+    <div className="lobby">
+      <h2 className="title">Enter Lobby</h2>
 
-          <input
-            type="text"
-            placeholder="Enter Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            style={{ padding: "10px", width: "200px" }}
-          />
+      <input
+        type="text"
+        placeholder="Enter Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        className="input"
+      />
 
-          <br />
-          <br />
+      <button onClick={connect} className="btn primary">
+        Join Call
+      </button>
 
-          <button onClick={connect} style={{ padding: "10px 20px" }}>
-            Connect
-          </button>
+      <video ref={localVideoref} autoPlay muted className="video-preview" />
+    </div>
+  ) : (
+    <div className="meet-call">
 
-          <div style={{ marginTop: "20px" }}>
-            <video ref={localVideoref} autoPlay muted width="300" />
+      {/* CHAT PANEL */}
+      {showModal && (
+        <div className="chat-panel">
+          <div className="chat-header">
+            <h3>Chat</h3>
+            <button onClick={() => setModal(false)}>✖</button>
+          </div>
+
+          <div className="chat-messages">
+            {messages.length > 0 ? (
+              messages.map((item, index) => (
+                <div key={index} className="chat-message">
+                  <b>{item.sender}</b>
+                  <p>{item.data}</p>
+                </div>
+              ))
+            ) : (
+              <p>No Messages Yet</p>
+            )}
+          </div>
+
+          <div className="chat-input">
+            <input
+              type="text"
+              placeholder="Enter message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+            <button onClick={sendMessage}>Send</button>
           </div>
         </div>
-      ) : (
-        <div>
-          {/* CHAT BOX */}
-          {showModal && (
-            <div
-              style={{
-                border: "1px solid gray",
-                padding: "10px",
-                marginBottom: "20px",
-                maxWidth: "400px",
-                marginInline: "auto",
-              }}
-            >
-              <h3>Chat</h3>
+      )}
 
-              <div style={{ height: "200px", overflowY: "auto" }}>
-                {messages.length > 0 ? (
-                  messages.map((item, index) => (
-                    <div key={index} style={{ marginBottom: "10px" }}>
-                      <b>{item.sender}</b>
-                      <p>{item.data}</p>
-                    </div>
-                  ))
-                ) : (
-                  <p>No Messages Yet</p>
-                )}
-              </div>
+      {/* VIDEO AREA */}
+      <div className="video-area">
 
-              <input
-                type="text"
-                placeholder="Enter message"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                style={{ width: "70%", padding: "8px" }}
-              />
+        {/* LOCAL VIDEO (MAIN) */}
+        <div className="main-video-wrapper">
+          <video ref={localVideoref} autoPlay muted className="main-video" />
+          <p className="username">You</p>
+        </div>
 
-              <button onClick={sendMessage} style={{ padding: "8px" }}>
-                Send
-              </button>
-            </div>
-          )}
-
-          {/* CONTROLS */}
-          <div style={{ marginBottom: "20px" }}>
-            <button onClick={handleVideo}>
-              {video ? "Video On" : "Video Off"}
-            </button>
-
-            <button onClick={handleAudio} style={{ marginLeft: "10px" }}>
-              {audio ? "Mic On" : "Mic Off"}
-            </button>
-
-            <button
-              onClick={handleEndCall}
-              style={{ marginLeft: "10px", color: "red" }}
-            >
-              End Call
-            </button>
-
-            {screenAvailable && (
-              <button onClick={handleScreen} style={{ marginLeft: "10px" }}>
-                {screen ? "Stop Share" : "Share Screen"}
-              </button>
-            )}
-
-            <button
-              onClick={() => setModal(!showModal)}
-              style={{ marginLeft: "10px" }}
-            >
-              Chat ({newMessages})
-            </button>
-          </div>
-
-          {/* LOCAL VIDEO */}
-          <div>
-            <h3>You</h3>
-            <video ref={localVideoref} autoPlay muted width="300" />
-          </div>
-
-          {/* REMOTE USERS */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              flexWrap: "wrap",
-              gap: "10px",
-              marginTop: "20px",
-            }}
-          >
-            {videos.map((video) => (
+        {/* REMOTE USERS */}
+        <div className="remote-grid">
+          {videos.map((video) => (
+            <div key={video.socketId} className="remote-card">
               <video
-                key={video.socketId}
                 ref={(ref) => {
                   if (ref && video.stream) {
                     ref.srcObject = video.stream;
                   }
                 }}
                 autoPlay
-                width="300"
+                className="remote-video"
               />
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      )}
+
+      </div>
+
+      {/* CONTROLS (BOTTOM FLOATING) */}
+      <div className="controls-bar">
+
+        <button onClick={handleVideo} className="control-btn">
+          {video ? <FaVideo /> : <FaVideoSlash />}
+        </button>
+
+        <button onClick={handleAudio} className="control-btn">
+          {audio ? <FaMicrophone /> : <FaMicrophoneSlash />}
+        </button>
+
+        {screenAvailable && (
+          <button onClick={handleScreen} className="control-btn">
+            <FaDesktop />
+          </button>
+        )}
+
+        <button
+          onClick={() => setModal(!showModal)}
+          className={`control-btn ${showModal ? "active" : ""}`}
+        >
+          <FaComments /> ({newMessages})
+        </button>
+
+        <button onClick={handleEndCall} className="control-btn end-call">
+          <FaPhoneSlash />
+        </button>
+
+      </div>
+
     </div>
+  )}
+</div>
   );
 }
