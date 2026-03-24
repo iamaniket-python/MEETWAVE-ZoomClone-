@@ -348,7 +348,7 @@ export default function VideoMeetComponent() {
           };
 
           // Wait for their video stream
-          connections[socketListId].onaddstream = (event) => {
+          connections[socketListId].ontrack = (event) => {
             let stream = event.streams[0];
 
             let videoExists = videoRef.current.find(
