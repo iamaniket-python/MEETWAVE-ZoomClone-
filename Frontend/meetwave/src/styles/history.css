@@ -1,0 +1,99 @@
+.history-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  padding: 40px;
+  color: white;
+  background: url("/public/history.jpg");
+
+  align-items: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.history-title {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.history-card {
+  border-radius: 16px !important;
+  overflow: hidden;
+  background: #1e293b !important;
+  color: white !important;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.history-card:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+.card-image {
+  height: 160px !important;
+}
+
+.card-title {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+}
+
+.card-text {
+  font-size: 14px !important;
+  color: #cbd5f5 !important;
+  margin-top: 5px !important;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px !important;
+}
+
+.join-btn {
+  background: #2563eb !important;
+  color: white !important;
+  border-radius: 8px !important;
+}
+
+.join-btn:hover {
+  background: #1d4ed8 !important;
+}
+
+.details-btn {
+  background: #374151 !important;
+  color: white !important;
+  border-radius: 8px !important;
+}
+
+.details-btn:hover {
+  background: #4b5563 !important;
+}
+
+.no-data {
+  text-align: center;
+  grid-column: 1/-1;
+  color: #080809;
+  font-size: 18px;
+}
+.back-btn {
+  display: block;
+  margin: 30px auto;
+  background: #2563eb !important;
+  color: white !important;
+  padding: 10px 20px !important;
+  border-radius: 10px !important;
+  font-weight: 500;
+  text-transform: none !important;
+}
+
+.back-btn:hover {
+  background: #1d4ed8 !important;
+}

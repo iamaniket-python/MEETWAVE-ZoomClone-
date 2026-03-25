@@ -46,6 +46,14 @@ function HomeComponent() {
         >
           Create New Meeting
         </button>
+        <button
+          className="create-btn"
+          onClick={() =>
+            navigate("/history")
+          }
+        >
+         History
+        </button>
       </div>
     </div>
   );

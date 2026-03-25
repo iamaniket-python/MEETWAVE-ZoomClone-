@@ -144,7 +144,7 @@ export default function Signin() {
           </Box>
 
           <Typography sx={{ textAlign: "center", mt: 2 }}>
-            Don't have an account? <Link href="/signup">Sign up</Link>
+            Don't have an account? <Link href="/register">Sign up</Link>
           </Typography>
         </Card>
       </SignInContainer>

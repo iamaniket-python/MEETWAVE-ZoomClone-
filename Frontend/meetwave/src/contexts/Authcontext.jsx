@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
   const handelLogin = async (email, password) => {
     try {
       const result = await axios.post(
-        "http://localhost:8000/api/v1/users/login",
+         "http://localhost:8000/api/v1/users/signin",
         {
           username: email,
           password,
@@ -47,19 +47,20 @@ export const AuthProvider = ({ children }) => {
       console.log(err);
     }
   };
+const getHistoryOfUser = async () => {
+  try {
+    let request = await client.get("/get_all_activity", {
+      params: {
+        token: localStorage.getItem("token"),
+      },
+    });
 
-  const getHistoryOfUser = async () => {
-    try {
-      let request = await client.get("/get_all_activity", {
-        params: {
-          token: localStorage.getItem("token"),
-        },
-      });
-      return request.data;
-    } catch (err) {
-      throw err;
-    }
-  };
+    return request.data?.data || request.data; // ✅ safer
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+};
 
   const addToUserHistory = async (meetingCode) => {
     try {

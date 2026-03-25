@@ -1,7 +1,9 @@
 import React from "react";
 import "../App.css";
-import { Link } from "react-router-dom";
+import { Link, Router, useNavigate } from "react-router-dom";
 function HomePage() {
+
+  const Router =useNavigate();
   return (
     <div className="HomepageContainer">
       <nav>
@@ -9,11 +11,17 @@ function HomePage() {
           <div className="logo">🌍</div>
 
           <div className="nav-links">
-            <a href="#">Join as Guest</a>
+            <a onClick={()=>{
+              Router("/nckn")
+            }} >Join as Guest</a>
           </div>
 
-          <button className="email-btn">Register</button>
-          <button className="login-btn">Login</button>
+          <button onClick={()=>{
+              Router("/register")
+            }} className="email-btn">Register</button>
+          <button onClick={()=>{
+              Router("/signin")
+            }} className="login-btn">Login</button>
         </div>
         <div className="hero">
           <div className="hero-left">
