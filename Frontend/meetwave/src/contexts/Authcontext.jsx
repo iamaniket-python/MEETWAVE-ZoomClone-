@@ -28,12 +28,17 @@ export const AuthProvider = ({ children }) => {
   const handelLogin = async (email, password) => {
     try {
       const result = await axios.post(
-         "http://localhost:8000/api/v1/users/signin",
-        {
-          username: email,
-          password,
-        }
-      );
+  "http://localhost:8000/api/v1/users/signin",
+  {
+    username: email,
+    password,
+  },
+  {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }
+);
 
       if (result.status === 200) {
         setUser(result.data.user);

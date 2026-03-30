@@ -3,7 +3,7 @@ import { User } from "../models/user.js";
 import bcrypt, { hash } from "bcrypt";
 import crypto from "crypto";
 
-export const login = async (req, res) => {
+export const signin = async (req, res) => {
   try {
     const { username, password } = req.body;
 
@@ -28,7 +28,13 @@ export const login = async (req, res) => {
 
     await user.save();
 
-    return res.status(httpStatus.OK).json({ token });
+    return res.status(httpStatus.OK).json({
+      token,
+      user: {
+        username: user.username,
+        name: user.name,
+      },
+    });
   } catch (error) {
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       message: error.message,

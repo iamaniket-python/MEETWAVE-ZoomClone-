@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { addToHistory, getUserHistory, authentication } from "../controllers/UserAuthentication.js";
-import { register } from "../controllers/UserAuthentication.js";
+import { addToHistory, getUserHistory } from "../controllers/UserAuthentication.js";
+import { register  } from "../controllers/UserAuthentication.js";
+import { signin } from "../controllers/UserAuthentication.js";
 
 const router =Router();
 
