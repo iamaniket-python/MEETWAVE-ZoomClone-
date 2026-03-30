@@ -70,6 +70,6 @@ This project is licensed under the MIT License.
 
 ## 👨‍💻 Author
 
-Developed by **Aniket Srivastava**
+Developed by **Aniket Shrivastava**
 
 If you like this project, consider giving it a ⭐ on GitHub.
