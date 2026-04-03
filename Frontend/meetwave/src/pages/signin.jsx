@@ -48,15 +48,15 @@ export default function Signin() {
 
   const [error, setError] = useState("");
 
-  // ✅ Correct submit handler
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const res = await handelLogin(email, password);
-
+ 
     if (res?.success) {
       setError("");
-      // redirect or success action
+     
     } else {
       setError(res?.message || "Login failed");
     }
@@ -96,6 +96,7 @@ export default function Signin() {
               <FormLabel>Email</FormLabel>
 
               <TextField
+              name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
@@ -107,6 +108,7 @@ export default function Signin() {
               <FormLabel>Password</FormLabel>
 
               <TextField
+              name="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 type="password"

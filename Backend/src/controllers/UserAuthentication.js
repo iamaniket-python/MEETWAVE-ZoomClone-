@@ -5,7 +5,22 @@ import crypto from "crypto";
 
 export const signin = async (req, res) => {
   try {
+    console.log("REQ BODY:", req.body);
+
+    // ✅ Safety check
+    if (!req.body || Object.keys(req.body).length === 0) {
+      return res.status(400).json({
+        message: "Body missing",
+      });
+    }
+
     const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res.status(400).json({
+        message: "Username and password required",
+      });
+    }
 
     const user = await User.findOne({ username });
 
@@ -36,12 +51,12 @@ export const signin = async (req, res) => {
       },
     });
   } catch (error) {
+    console.log("ERROR:", error);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       message: error.message,
     });
   }
 };
-
 // register
 export const register = async (req, res) => {
   const { name, username, password } = req.body;

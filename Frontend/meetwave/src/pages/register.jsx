@@ -55,14 +55,14 @@ export default function Register() {
 
     if (res?.success) {
       setError("");
-      setSuccess(res.message || "Registered successfully");
+      setSuccess(res.message || "user already exist");
 
       setName("");
       setEmail("");
       setPassword("");
     } else {
       setSuccess("");
-      setError(res?.message || "User Already Exist");
+      setError(res?.message || "Registered successfully");
     }
   };
 

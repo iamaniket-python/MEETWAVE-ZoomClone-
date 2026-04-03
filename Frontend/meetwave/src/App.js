@@ -5,6 +5,7 @@ import LandingPage from "./pages/landing";
 import History from "./pages/history"; 
 import Signin from "./pages/signin";
 import Register from "./pages/register";
+
 import { AuthProvider } from "./contexts/Authcontext";
 import VideoMeet from "./pages/Videomeet";
 import HomeComponent from "./pages/home";
