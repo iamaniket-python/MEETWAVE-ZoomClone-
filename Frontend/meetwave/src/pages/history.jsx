@@ -21,15 +21,26 @@ export default function History() {
     const fetchHistory = async () => {
       try {
         const data = await getHistoryOfUser();
-        console.log("FULL RESPONSE:", data); 
-        setMeetings(data || []);
+        console.log("FULL RESPONSE:", data);
+        console.log("TYPE:", typeof data, "VALUE:", data);
+
+        // Handle different response shapes
+        if (Array.isArray(data)) {
+          setMeetings(data);
+        } else if (data?.meetings) {
+          setMeetings(data.meetings);
+        } else if (data?.data) {
+          setMeetings(data.data);
+        } else {
+          setMeetings([]);
+        }
       } catch (err) {
         console.log("Error:", err);
       }
     };
 
     fetchHistory();
-  }, []);
+  }, [getHistoryOfUser]);
 
   return (
     <div className="history-container">
@@ -44,23 +55,28 @@ export default function History() {
           <p className="no-data">No meetings found</p>
         ) : (
           meetings.map((item, index) => (
-            <Card className="history-card" key={index}>
+            <Card className="history-card" key={item?.meetingCode || item?._id || index}>
               <CardMedia
-                className="card-image"
-                image="https://source.unsplash.com/featured/?meeting"
+                component="img"
+                height="140"
+                image="https://picsum.photos/seed/meeting/400/200"
+                alt="Meeting"
               />
 
               <CardContent>
-                <Typography className="card-title">
+                <Typography className="card-title" variant="h6">
                   Meeting #{index + 1}
                 </Typography>
 
-                <Typography className="card-text">
-                  Code: {item?.meetingCode}
+                <Typography className="card-text" variant="body2">
+                  Code: {item?.meetingCode || "N/A"}
                 </Typography>
 
-                <Typography className="card-text">
-                  Date: {item?.date}
+                <Typography className="card-text" variant="body2">
+                  Date:{" "}
+                  {item?.date
+                    ? new Date(item.date).toLocaleDateString()
+                    : "N/A"}
                 </Typography>
               </CardContent>
 

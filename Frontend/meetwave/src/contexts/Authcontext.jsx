@@ -1,6 +1,6 @@
 import React, { createContext, useState } from "react";
 import axios from "axios";
-import client from "../utils/api"; // ✅ FIXED
+import client from "../utils/api"; 
 
 export const AuthContext = createContext();
 
